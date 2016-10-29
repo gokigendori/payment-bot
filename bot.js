@@ -46,7 +46,7 @@ controller.on('rtm_open', (bot) => {
 
 controller.hears('',
     ['direct_message', 'direct_mention', 'mention', 'ambient'],
-    function (bot, message) {
+    (bot, message) => {
         jsonGet(luisAPI + encodeURI(message.text))
             .then((result) => processResult(result, bot, message));
     }
@@ -59,9 +59,8 @@ function sayIntervalComment(bot) {
         sayPushPhrase(bot);
         return;
     }
-
     const text = sprintf(Config.lastMessage, Config.channel, process.env.mention);
-    bot.say({text: text, channel: process.env.channelId}, null);
+    bot.say({text: text, channel: process.env.channelId});
     stopProcess();
 }
 
@@ -118,11 +117,12 @@ function saveCompleteDate(entities) {
         }
     });
 }
+// 集計用
 function aggregatePayment(bot) {
 
-    var promises = [];
+    let promises = [];
     for (let i = 1; i < 8; i++) {
-        var d = sprintf('payment_%s', moment().add(-i, 'days').format('YYYYMMDD'));
+        const d = sprintf('payment_%s', moment().add(-i, 'days').format('YYYYMMDD'));
         promises.push(getPromise(d));
     }
 
@@ -130,9 +130,8 @@ function aggregatePayment(bot) {
         return yield promises;
     }).then((results)=> {
         const size = (results.filter((r)=>(r))).length;
-        bot.say({text: `先週の振込件数は${size}ね。よく頑張りました。`, channel: process.env.channelId}, null);
+        bot.say({text: `先週の振込件数は${size}件ね。よく頑張りました。`, channel: process.env.channelId}, null);
     });
-
 }
 
 function getPromise(str) {
@@ -154,10 +153,13 @@ function reply(bot, message) {
         return;
     }
     // 日本語が入っていればtiqavで返信してみる
-    const text = (message.text.match(/[亜-熙ぁ-んァ-ヶ]+/)) ? `http://${message.text}.tiqav.com` : Config.coolMessage;
+    const text = (message.text.match(/[亜-熙ぁ-んァ-ヶ]+/)) ?
+        `http://${message.text}.tiqav.com` :
+        Config.coolMessage;
     bot.reply(message, text);
 }
 
+// 結果をjsonで保存
 function saveDate(date) {
 
     controller.storage.channels.save({
@@ -173,7 +175,9 @@ function finishProcess(bot, message) {
     if (message.channel != process.env.channelId) {
         return;
     }
-    const comment = (( new Date()).toFormat("HH24") < Config.talkStartHour) ? Config.pleasureReply : Config.displeasureReply;
+    const comment = (( new Date()).toFormat("HH24") < Config.talkStartHour) ?
+        Config.pleasureReply :
+        Config.displeasureReply;
 
     bot.reply(message, comment);
     stopProcess();
@@ -185,7 +189,7 @@ function sayPushPhrase(bot) {
         return;
     }
     const text = sprintf(Config.reminderMessage, process.env.mention);
-    bot.say({text: text, channel: process.env.channelId}, null);
+    bot.say({text: text, channel: process.env.channelId});
 }
 
 function stopProcess() {

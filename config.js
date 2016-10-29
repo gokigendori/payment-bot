@@ -12,5 +12,4 @@ let staticConfig = {
     coolMessage:'何でそんなことあなたに言わなきゃいけないの？',
 };
 
-
 module.exports = staticConfig;
