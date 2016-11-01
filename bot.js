@@ -6,8 +6,6 @@ const Config = require('./src/config');
 const Slack = require('./src/slack');
 const Luis = require('./src/luis');
 
-require('date-utils');
-
 if (!process.env.token) {
     console.log('Error: Specify token in environment');
     process.exit(1);
@@ -34,7 +32,7 @@ controller.on('rtm_open', () => {
 });
 
 controller.hears(
-    ['done', 'finish', 'ok', '完了'],
+    ['done'],
     ['direct_message', 'direct_mention', 'mention', 'ambient'],
     (bot, message) => {
         slack.finishProcess(message);
@@ -99,7 +97,7 @@ const getPromise = (str) => controller.storage.channels.getAsync(str).catch(() =
 // 結果をjsonで保存
 const saveDate = (date) => {
     controller.storage.channels.save({
-        id: `payment_${(new Date(date)).toFormat("YYYYMMDD")}`,
+        id: `payment_${moment(date, 'YYYY/MM/DD').format("YYYYMMDD")}`,
         created_at: new Date()
     }, (err) => {
         console.log(err);
@@ -108,7 +106,7 @@ const saveDate = (date) => {
 };
 
 const saveError = (num) => {
-    const today = (new Date()).toFormat("YYYYMMDD");
+    const today = moment().format("YYYYMMDD");
     controller.storage.channels.save({
         id: `error_${today}`,
         num,

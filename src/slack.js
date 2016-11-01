@@ -1,6 +1,7 @@
 'use strict';
 const Config = require('./config');
 const Reply = require('./reply');
+const moment = require('moment');
 
 class Slack {
     constructor(bot) {
@@ -9,7 +10,7 @@ class Slack {
 
     // 定期的なつぶやき
     sayIntervalComment() {
-        const hour = ( new Date()).toFormat("HH24");
+        const hour = moment().format("k");
         if (hour < Config.untilHour) {
             sayPushPhrase(this.bot);
             return;
@@ -52,7 +53,7 @@ class Slack {
         if (message.channel != process.env.channelId) {
             return;
         }
-        const comment = (( new Date()).toFormat("HH24") < Config.talkStartHour) ?
+        const comment = (moment().format("k") < Config.talkStartHour) ?
             Reply.pleasure() :
             Reply.displeasure();
 
@@ -62,7 +63,7 @@ class Slack {
 }
 
 const sayPushPhrase = (bot) => {
-    if (( new Date()).toFormat("HH24") < Config.talkStartHour) {
+    if (moment().format("k") < Config.talkStartHour) {
         return;
     }
     const text = Reply.reminder(process.env.mention);

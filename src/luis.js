@@ -1,4 +1,5 @@
 'use strict';
+const moment = require('moment');
 const fetch = require('node-fetch');
 
 const luisAPI = `https://api.projectoxford.ai/luis/v1/application?id=${process.env.luisId}&subscription-key=${process.env.luisSubscriptionKey}&q=`;
@@ -25,8 +26,8 @@ class Luis {
     }
 
     getCompleteDates(entities, cb) {
-        const year = ( new Date()).toFormat("YYYY");
-        let month = ( new Date()).toFormat("MM");
+        const year = moment().format("YYYY");
+        let month = moment().format("MM");
 
         entities.forEach((entity) => {
             let date;
