@@ -27,7 +27,7 @@ class Slack {
         }
         // 日本語が入っていればtiqavで返信してみる
         const text = (message.text.match(/[亜-熙ぁ-んァ-ヶ]+/)) ?
-            `http://${message.text.replace(/[、。！]/g,'')}.tiqav.com` :
+            `http://${message.text.replace(/[、。！？]/g,'')}.tiqav.com` :
             Reply.cool();
 
         this.bot.reply(message, text);
