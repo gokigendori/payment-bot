@@ -31,6 +31,10 @@ controller.on('rtm_open', () => {
     setInterval(() => slack.sayIntervalComment() , Config.oneHour);
 });
 
+controller.on('rtm_close', () => {
+    setInterval(() => slack.sayIntervalComment(), Config.oneHour);
+});
+
 controller.hears(
     ['done'],
     ['direct_message', 'direct_mention', 'mention', 'ambient'],
