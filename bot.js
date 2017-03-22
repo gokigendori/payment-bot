@@ -32,7 +32,8 @@ controller.on('rtm_open', () => {
 });
 
 controller.on('rtm_close', () => {
-    setInterval(() => slack.sayIntervalComment(), Config.oneHour);
+    console.log("slack bot reconnect");
+    bot.startRTM();
 });
 
 controller.hears(
