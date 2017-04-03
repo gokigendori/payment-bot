@@ -13,6 +13,7 @@ if (!process.env.token) {
 
 const controller = Botkit.slackbot({
     json_file_store: './json_db',
+    retry: 5,
     debug: true,
 });
 Promise.promisifyAll(controller.storage.channels);
@@ -32,8 +33,7 @@ controller.on('rtm_open', () => {
 });
 
 controller.on('rtm_close', () => {
-    console.log("slack bot reconnect");
-    bot.startRTM();
+    console.log("catch rtm_close event.");
 });
 
 controller.hears(

@@ -73,7 +73,7 @@ const sayPushPhrase = (bot) => {
 const stopProcess = () => {
     setTimeout(() => {
         process.exit();
-    }, 100);
+    }, 1500);
 };
 
 module.exports = Slack;
