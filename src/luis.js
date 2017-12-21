@@ -1,11 +1,19 @@
 'use strict';
 const moment = require('moment');
 const fetch = require('node-fetch');
+const https = require('https');
 
 const luisAPI = `https://api.projectoxford.ai/luis/v1/application?id=${process.env.luisId}&subscription-key=${process.env.luisSubscriptionKey}&q=`;
 class Luis {
     request(message, cb) {
-        fetch(luisAPI + encodeURI(message.text))
+
+        const options = {
+            hostname: 'api.projectoxford.ai',
+            port: 443,
+            rejectUnauthorized: false
+        };
+
+        fetch(luisAPI + encodeURI(message.text), {agent: new https.Agent(options)})
             .then((res) => res.json())
             .then((result) => {
                 result.entities.forEach((entity) => {
