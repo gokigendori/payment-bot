@@ -25,8 +25,8 @@ class Slack {
         if (message.channel != process.env.channelId) {
             return;
         }
-        // 日本語が入っていればtiqavで返信してみる
-        const text = (message.text.match(/[亜-熙ぁ-んァ-ヶ]+/)) ?
+        // 日本語の文ならtiqavで返信してみる
+        const text = (message.text.match(/^[亜-熙ぁ-んァ-ヶ]+$/)) ?
             `http://${message.text.replace(/[、。！？]/g,'')}.tiqav.com` :
             Reply.cool();
 
